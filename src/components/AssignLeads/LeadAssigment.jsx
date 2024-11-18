@@ -313,6 +313,7 @@ const LeadAssign = () => {
     usePagination
   );
 
+  console.log(checkedLeads)
   return (
     <>
       <Header />
@@ -507,12 +508,34 @@ const LeadAssign = () => {
               <div className="bg-white flex justify-end">
                   <CircleX size={23} onClick={() => setIsModalOpen(false)} className="cursor-pointer"  />
               </div>
+
+              {/* Assign div  */}
+              <div className="w-full flex gap-2 p-2 select-none">
+
+            <div className=" border border-gray-300 w-full rounded-md p-1">
+              <p className="text-center font-semibold">Selected Leads</p>
+              <hr />
+              <p className="flex gap-2 font-semibold text-wrap">
+                  {checkedLeads.map((lead, index) => (
+                    <p key={index}>ID: {lead.ID}</p>
+                  ))} 
+              </p>
+            </div>
+
+            <div className=" border border-gray-300 w-full rounded-md p-1">
+            <p className="text-center font-semibold">Assign To</p>
+            <hr />
+            <div>
+
+            </div>
+            </div>
+          </div>
+
           </div>
 
 
-          <div className="">
 
-          </div>
+         
           </div>
       )}
     </>
