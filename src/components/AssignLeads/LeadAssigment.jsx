@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useMemo } from "react";
+import React, { useEffect, useState , useMemo, useContext } from "react";
 import Header from "@components/common/Header";
 import Sidebar from "@components/common/Sidebar";
 import LoaderComponent from "@components/common/LoaderComponent.jsx";
@@ -8,8 +8,9 @@ import { RefreshCcw, Filter, FilterX, Search, SearchX , CircleX , UserPen  } fro
 import Select, { components } from 'react-select';
 import makeAnimated from 'react-select/animated';
 import DateRangePicker from "@common/DateRangePicker";
-import axios from 'axios';
 import Assignlead from "@components/AssignLeads/Assignlead.jsx";
+import { AppContext } from "@context/AppContext";
+
 
 
 const LeadAssign = () => {
@@ -26,7 +27,9 @@ const LeadAssign = () => {
   const [activeFilter, setActiveFilter] = useState(null); 
   const [checkedLeads , setCheckedLeads] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [usersData , setUsersData] = useState(null);
+  const [assignTo , setAssignTo] = useState(null);
+  const { activeUserData } = useContext(AppContext);
   const [filterSelectedValues, setSelectedValues] = useState({
     language: [],
     state: [],
@@ -36,7 +39,6 @@ const LeadAssign = () => {
     start_date: null,
     end_date: null
   });
-
   const animatedComponents = makeAnimated();
 
   const customStyles = {
@@ -115,6 +117,7 @@ const LeadAssign = () => {
     try {
       const response = await apiInstance('/dropdowndata.php', 'POST');
       setDropdownData(response.data);
+      setUsersData(response.data.users)
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -313,7 +316,22 @@ const LeadAssign = () => {
     usePagination
   );
 
-  console.log(checkedLeads)
+
+  const handleAssignLeads = () => {
+
+      if(checkedLeads.length > 0 && assignTo) {
+        const requestBody = {
+          leads: checkedLeads.map(lead => lead.ID).join(','),
+          assign_to: assignTo,
+          assigned_by: activeUserData?.user_id.split('')[5]
+        };
+
+        console.log(requestBody);
+      }
+
+      
+  }
+
   return (
     <>
       <Header />
@@ -326,7 +344,7 @@ const LeadAssign = () => {
         <section className="flex-1 my-4 ml-4 mr-7">
           <div className="w-full border p-1 bg-white shadow-sm rounded-md flex justify-between">
 
-            {/* SWitch tabs  */}
+            {/* Switch tabs  */}
             <div className="flex text-xs gap-2 bg-gray-200 p-1 rounded pl-1">
               <span
                 className={`${switchState === "all" ? "bg-[#0052CC] text-white" : ""} p-1 rounded-md cursor-pointer`}
@@ -512,6 +530,8 @@ const LeadAssign = () => {
               {/* Assign div  */}
               <div className="w-full flex gap-2 p-2 select-none">
 
+
+            {/* Selected Leads div  */}
             <div className=" border border-gray-300 w-full rounded-md p-1">
               <p className="text-center font-semibold">Selected Leads</p>
               <hr />
@@ -522,14 +542,35 @@ const LeadAssign = () => {
               </p>
             </div>
 
+            {/* Assign to div  */}
             <div className=" border border-gray-300 w-full rounded-md p-1">
             <p className="text-center font-semibold">Assign To</p>
             <hr />
+            <select className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" onChange={(e) => setAssignTo(e.target.value)}>
+              <option value="">Select User</option>
+              {usersData?.map((user) => (
+                <option key={user.user_id} value={user.user_id}>
+                  {user.user_full_name}
+                </option>
+              ))}
+            </select>
             <div>
 
             </div>
             </div>
-          </div>
+
+
+
+
+              </div>
+
+              <div className="flex justify-center mt-3">
+                <button className="bg-[#0052CC] text-white p-2 rounded-md flex gap-2 cursor-pointer text-xs"
+                  onClick={handleAssignLeads}
+                >
+                  Assign Leads
+                </button>
+              </div>
 
           </div>
 
