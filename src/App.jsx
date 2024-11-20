@@ -9,8 +9,8 @@ import useStore from "@store";
 import Dashboard from "@pages/Dashboard";
 import LeadAssign from "@components/AssignLeads/LeadAssigment";
 import ManageEmp from "@components/EmployeeManagement/ManageEmp";
-
-
+import TagLead from "@components/LeadTagging/TagLead";
+import SalesDashboard from "@components/Dashboards/SalesDashboard";
 
 
 const App = () => {
@@ -50,6 +50,18 @@ const App = () => {
                 element={<ManageEmp />} 
                 key={"ManageEmp-page"} 
               />
+            } 
+          />
+          <Route 
+            path="/tagLead" 
+            element={
+              <ProtectedRoute element={<TagLead />} key={"tagLead-page"} />
+            } 
+          />
+          <Route 
+            path="/salesDashhboard" 
+            element={
+              <ProtectedRoute element={<SalesDashboard />} key={"salesDashboard-page"} />
             } 
           />
         </Routes>

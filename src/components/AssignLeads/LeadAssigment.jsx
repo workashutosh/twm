@@ -28,6 +28,7 @@ const LeadAssign = () => {
   const [checkedLeads , setCheckedLeads] = useState([])
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usersData , setUsersData] = useState(null);
+  const [remark , setRemark] = useState(null);
   const [assignTo , setAssignTo] = useState(null);
   const { activeUserData } = useContext(AppContext);
   const [filterSelectedValues, setSelectedValues] = useState({
@@ -206,19 +207,6 @@ const LeadAssign = () => {
     setActiveFilter(renderedFilter);
     fetchData(renderedFilter);
   };
-
-  const toggleAllChecks = (checked) => {
-    if (checked) {
-      // Get all IDs and form_ids from the current page
-      const pageLeads = page.map(row => ({
-        ID: row.original.ID,
-        form_id: row.original.form_id
-      }));
-      setCheckedLeads(pageLeads);
-    } else {
-      setCheckedLeads([]);
-    }
-  };
   
   // Table columns configuration
   const columns = useMemo(
@@ -316,20 +304,24 @@ const LeadAssign = () => {
     usePagination
   );
 
+  const handleAssignLeads = async () => {
 
-  const handleAssignLeads = () => {
-
-      if(checkedLeads.length > 0 && assignTo) {
+      if(checkedLeads.length > 0 && assignTo && remark) {
         const requestBody = {
           leads: checkedLeads.map(lead => lead.ID).join(','),
-          assign_to: assignTo,
-          assigned_by: activeUserData?.user_id.split('')[5]
+          assign_to: assignTo,  
+          assigned_by: activeUserData?.user_id.split('')[5],
+          remark: remark
         };
 
-        console.log(requestBody);
-      }
-
-      
+        const response = await apiInstance('/assign_lead.php', 'POST', requestBody);
+        if(response.status === 200) {
+          setCheckedLeads([]);
+          setRemark(null);
+          setAssignTo(null);
+          setIsModalOpen(false);
+        }
+      }   
   }
 
   return (
@@ -562,6 +554,14 @@ const LeadAssign = () => {
 
 
 
+              </div>
+              {/* Remark Adding Section */}
+              <div className="w-full flex gap-2 p-2 select-none">
+                <div className=" border border-gray-300 w-full rounded-md p-1">
+                  <p className="text-center font-semibold">Add Remark</p>
+                  <hr />
+                  <textarea className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" onChange={(e) => setRemark(e.target.value)}></textarea>
+                </div>
               </div>
 
               <div className="flex justify-center mt-3">

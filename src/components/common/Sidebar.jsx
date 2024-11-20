@@ -2,8 +2,7 @@ import { useLocation, Link } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import IMAGES from "@images";
 import { AppContext } from "@context/AppContext";
-import useStore from "@store";
-import { Home, BarChart2, UserRound   } from "lucide-react"; 
+import { Home, BarChart2, UserRound , Tag , LayoutDashboard } from "lucide-react"; 
 
 const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   const { pathname } = useLocation();
@@ -104,6 +103,61 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
           </div>
         </Link>
         )}
+
+        {/* sales pages start  */}
+
+        {/* Sales Dashboard */}
+        {activeUserData?.user_position && activeUserData?.user_position !== "1" && (
+        <Link to="/salesDashhboard">
+          <div
+            className={`cursor-pointer square-box flex group hover:bg-[#0052CC] items-center gap-4 py-2 px-4 ${
+              pathname === "/salesDashhboard" ? "bg-[#0052CC]" : ""
+            }`}
+          >
+            <LayoutDashboard 
+              size={20}
+              color={pathname === "/salesDashhboard" ? "white" : "#8A8A8A"}
+              className="group-hover:color-white"
+            />
+            {isSidebarVisible && (
+              <p
+                className={`${
+                  pathname === "/salesDashhboard" ? "text-white" : ""
+                } text-[#6F6B6B] group-hover:text-white`}
+              >
+                Sales Dashboard
+              </p>
+            )}
+          </div>
+        </Link>
+        )}
+
+        {/* Tag Leads */}
+        {activeUserData?.user_position && activeUserData?.user_position !== "1" && (
+        <Link to="/tagLead">
+          <div
+            className={`cursor-pointer square-box flex group hover:bg-[#0052CC] items-center gap-4 py-2 px-4 ${
+              pathname === "/tagLead" ? "bg-[#0052CC]" : ""
+            }`}
+          >
+            <Tag 
+              size={20}
+              color={pathname === "/tagLead" ? "white" : "#8A8A8A"}
+              className="group-hover:color-white"
+            />
+            {isSidebarVisible && (
+              <p
+                className={`${
+                  pathname === "/tagLead" ? "text-white" : ""
+                } text-[#6F6B6B] group-hover:text-white`}
+              >
+                Tag Leads
+              </p>
+            )}
+          </div>
+        </Link>
+        )}
+
       </div>
     </aside>
   );
