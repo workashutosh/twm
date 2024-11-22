@@ -283,6 +283,16 @@ const LeadAssign = () => {
         accessor: 'assigned_to',
         Cell: ({ value }) => value ? <div className="bg-green-300 p-1 rounded-sm">{value}</div> : 'Not Assigned'
       },
+      {
+        Header: 'Assigned at',
+        accessor: 'assigned_at',
+        Cell: ({ value }) => value ? <div className="bg-green-300 p-1 rounded-sm">{value}</div> : 'Not Assigned'
+      },
+      {
+        Header: 'Assigned By',
+        accessor: 'assigned_by',
+        Cell: ({ value }) => value ? <div className="bg-green-300 p-1 rounded-sm">{value}</div> : 'None'
+      },
     ],
     [checkedLeads]
   );

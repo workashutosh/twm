@@ -11,7 +11,7 @@ const Sidebar = ({ isSidebarVisible, setIsSidebarVisible }) => {
   return (
     <aside
       className={`${
-        isSidebarVisible ? "min-w-[16vw]" : "w-fit"
+        isSidebarVisible ? "min-w-[9vw]" : "w-fit"
       } bg-white h-screen pt-4 sticky select-none top-[55px] z-[40]`}
     >
       <img
