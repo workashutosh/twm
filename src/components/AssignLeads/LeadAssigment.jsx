@@ -13,7 +13,7 @@ import { AppContext } from "@context/AppContext";
 
 
 
-const LeadAssign = () => {
+const LeadAssign = () => {         
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [switchState, setSwitchState] = useState("all");
   const [loaderActive, setLoaderActive] = useState(false);
@@ -328,7 +328,7 @@ const LeadAssign = () => {
           remark: remark
         };
 
-        const response = await apiInstance('/assign_lead.php', 'POST', requestBody);
+        const response = await apiInstance('/assign_lead.php', 'PATCH', requestBody);
         if(response.status === 200) {
           setCheckedLeads([]);
           setRemark(null);
