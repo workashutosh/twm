@@ -11,7 +11,7 @@ import DateRangePicker from "@common/DateRangePicker";
 import Assignlead from "@components/AssignLeads/Assignlead.jsx";
 import { AppContext } from "@context/AppContext";
 
-
+//main component for lead assignment
 
 const LeadAssign = () => {         
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
@@ -276,6 +276,7 @@ const LeadAssign = () => {
       { Header: 'IP', accessor: 'ip' },
       { Header: 'Language', accessor: 'language_chosen' },
       { Header: 'Option Type', accessor: 'option_Type' },
+      { Header: 'Campaign', accessor: 'utc' },
       { Header: 'Amount Range', accessor: 'amount_Range' },
       { Header: 'Submission Date', accessor: 'Submission_Date' },
       {
@@ -347,8 +348,8 @@ const LeadAssign = () => {
           isSidebarVisible={isSidebarVisible}
           setIsSidebarVisible={setIsSidebarVisible}
         />
-        <section className="flex-1 my-4 ml-4 mr-7">
-          <div className="w-full border p-1 bg-white shadow-sm rounded-md flex justify-between">
+        <section className="flex-1 w-[80%] my-4 ml-4 mr-4">
+          <div className=" border p-1 bg-white shadow-sm rounded-md flex justify-between">
 
             {/* Switch tabs  */}
             <div className="flex text-xs gap-2 bg-gray-200 p-1 rounded pl-1">
@@ -412,7 +413,7 @@ const LeadAssign = () => {
           </div>
 
           <div>
-            {filterVisible && (
+            {filterVisible && switchState === "all" && (
               <div className="w-full justify-between flex gap-2 rounded-md p-1 mt-1 bg-white shadow-md">
                 <div className="flex gap-2">
                   <DateRangePicker value={daterange} setValue={setDaterange} />
@@ -456,8 +457,8 @@ const LeadAssign = () => {
             )}
 
             {switchState === "all" && (
-                <div className="w-full border p-1 bg-white shadow-sm rounded-md mt-1">
-                  <table {...getTableProps()} className="min-w-full bg-white">
+                <div className="border overflow-x-auto p-1 bg-white shadow-sm rounded-md mt-1">
+                  <table {...getTableProps()} className="bg-white">
                     <thead>
                       {headerGroups.map((headerGroup) => (
                         <tr {...headerGroup.getHeaderGroupProps()}>
@@ -519,7 +520,7 @@ const LeadAssign = () => {
             )}
 
              {switchState === "assign" && (
-                <Assignlead />
+                <Assignlead switchState={switchState} filterVisible={filterVisible} />
             )} 
           </div>
 
