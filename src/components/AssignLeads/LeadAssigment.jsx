@@ -4,7 +4,7 @@ import Sidebar from "@components/common/Sidebar";
 import LoaderComponent from "@components/common/LoaderComponent.jsx";
 import { useTable, usePagination, useSortBy } from 'react-table';
 import apiInstance from "@api/apiInstance";
-import { RefreshCcw, Filter, FilterX, Search, SearchX , CircleX , UserPen  } from "lucide-react";
+import { RefreshCcw, Filter, FilterX, Search, SearchX , PackageX , CircleX , UserPen  } from "lucide-react";
 import Select, { components } from 'react-select';
 import makeAnimated from 'react-select/animated';
 import DateRangePicker from "@common/DateRangePicker";
@@ -339,6 +339,33 @@ const LeadAssign = () => {
       }   
   }
 
+  const handleDeleteLeads = async () => {
+    if(checkedLeads.length > 0) {
+      if (!window.confirm("Are you sure you want to delete the selected leads?")) {
+        return;
+      }
+
+      const requestBody = {
+        leads: checkedLeads.map(lead => lead.ID).join(','),
+        deleted_by: activeUserData?.user_id.split('')[5]
+      };
+
+      try {
+        const response = await apiInstance('/assign_lead.php', 'DELETE', requestBody);
+        if(response.status === 200) {
+          fetchData(activeFilter);
+          alert('Leads Deleted Successfully');
+          //setCheckedLeads([]);
+          //setRemark(null);
+          //setAssignTo(null);
+          //setIsModalOpen(false);
+        }
+      } catch (error) {
+        console.error('Error deleting leads:', error);
+      }
+    }   
+  }
+
   return (
     <>
       <Header />
@@ -383,6 +410,8 @@ const LeadAssign = () => {
                 placeholder="Search..."
                 className="border rounded-md px-2 w-[200px] py-1 text-xs"
               />
+
+              {/* Checked Leads Assign Button  */}
              {checkedLeads && checkedLeads?.length > 0 && (
                 <>
                 <button
@@ -391,6 +420,18 @@ const LeadAssign = () => {
                  >
                  Assign Leads
                   <UserPen size={18} />
+               </button>
+                </>
+              )}
+              {/* Delete Button  */}
+              {checkedLeads && checkedLeads?.length > 0 && (
+                <>
+                <button
+                className="bg-[#0052CC] text-white p-1 rounded-md flex gap-2 cursor-pointer text-xs"
+                onClick={handleDeleteLeads} 
+                 >
+                 Delete
+                  <PackageX size={18} />
                </button>
                 </>
               )}
